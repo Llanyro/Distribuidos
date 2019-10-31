@@ -10,6 +10,7 @@ void sigClose(int dummy)
 {
     server->closeServer();
     delete server;
+    cout << endl << "Cerrando programa" << endl;
     exit(0);
 }
 
@@ -25,12 +26,11 @@ int main()
     cin >> user;
     cout << "Introduce la password del user de la db" << endl;
     cin >> pass;
-    cout << "Introduce el puerto de escucha del servido" << endl;
+    cout << "Introduce el puerto de escucha del servidor http" << endl;
     cin >> port;
 
     bool temp = false;
-    server = new httpServer(8080, path, ip, user, pass);
-    //server = new httpServer(port);
+    server = new httpServer(port, path, ip, user, pass);
     signal(SIGINT, sigClose);
 
     if(server->isConectedToDataBase())

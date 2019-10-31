@@ -21,7 +21,7 @@ httpServer::httpServer(unsigned short port, std::string path, std::string ipDB, 
 
     sock_fd = socket(AF_INET, SOCK_STREAM, 0);
      if (sock_fd < 0)
-         printf("Error creating socket\n");
+         std::cout << "Error creating socket" << std::endl;
     struct sockaddr_in serv_addr;
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -36,7 +36,7 @@ httpServer::httpServer(unsigned short port, std::string path, std::string ipDB, 
 
     if (bind(sock_fd,(struct sockaddr *) &serv_addr,
           sizeof(serv_addr)) < 0)
-          printf("ERROR on binding");
+            std::cout << "ERROR on binding" << std::endl;
     listen(sock_fd,5);
 
     buildMimetypeTable();
@@ -143,7 +143,6 @@ void httpServer::sendFile(int newsock_fd, char* file)
 {
     std::string mimetype = getmimeType(file);
     std::string filepath = this->files_path + std::string(file);
-    //std::cout << filepath << std::endl;
     char* fileContent = nullptr;
     unsigned long int filelen = 0ull;
     char* httpHeader = nullptr;
@@ -222,7 +221,6 @@ bool httpServer::validatePassword(std::string username, std::string password)
         std::string command = "select * from usuarios where user='" + username + "' and password='" + hash + "';";
 
         int qstate = mysql_query(this->serverPointer, &command[0]);
-        std::cout << qstate << std::endl;
         if(qstate == 0)
         {
             MYSQL_ROW row;
@@ -233,10 +231,21 @@ bool httpServer::validatePassword(std::string username, std::string password)
             {
                 row = mysql_fetch_row(res);
                 if(row != nullptr)
+                {
                     temp = true;
+                    std::cout << "Un usuario llamado [" << username << "] ha iniciado sesion corretemente." << std::endl;
+                }
+                else
+                    std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas)." << std::endl;
             }
+            else
+                std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas)." << std::endl;
         }
+        else
+            std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas)." << std::endl;
     }
+    else
+        std::cout << "No hay conexion a la DB." << std::endl;
     return temp;
 }
 void httpServer::closeServer()
