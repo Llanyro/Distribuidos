@@ -143,6 +143,7 @@ void httpServer::sendFile(int newsock_fd, char* file)
 {
     std::string mimetype = getmimeType(file);
     std::string filepath = this->files_path + std::string(file);
+    std::cout << filepath << std::endl;
     char* fileContent = nullptr;
     unsigned long int filelen = 0ull;
     char* httpHeader = nullptr;
@@ -236,13 +237,13 @@ bool httpServer::validatePassword(std::string username, std::string password)
                     std::cout << "Un usuario llamado [" << username << "] ha iniciado sesion corretemente." << std::endl;
                 }
                 else
-                    std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas)." << std::endl;
+                    std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas1)." << std::endl;
             }
             else
-                std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas)." << std::endl;
+                std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas2)." << std::endl;
         }
         else
-            std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas)." << std::endl;
+            std::cout << "Un usuario llamado [" << username << "] ha intentado iniciar sesion(User/Password erroneas3)." << std::endl;
     }
     else
         std::cout << "No hay conexion a la DB." << std::endl;
