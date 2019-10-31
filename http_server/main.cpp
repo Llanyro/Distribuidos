@@ -15,22 +15,22 @@ void sigClose(int dummy)
 
 int main()
 {
-//    string path, ip, user, pass;
+    string path, ip, user, pass;
     unsigned short port = 8080;
-//    cout << "Introduce la carpeta del servidor https(Vacio para que sea por default): " << endl;
-//    cin >> path;
-//    cout << "Introduce la ip del servidor db" << endl;
-//    cin >> ip;
-//    cout << "Introduce el usuario de la db" << endl;
-//    cin >> user;
-//    cout << "Introduce la password del user de la db" << endl;
-//    cin >> pass;
-//    cout << "Introduce el puerto de escucha del servido" << endl;
-//    cin >> port;
+    cout << "Introduce la carpeta del servidor https(Vacio para que sea por default): " << endl;
+    cin >> path;
+    cout << "Introduce la ip del servidor db" << endl;
+    cin >> ip;
+    cout << "Introduce el usuario de la db" << endl;
+    cin >> user;
+    cout << "Introduce la password del user de la db" << endl;
+    cin >> pass;
+    cout << "Introduce el puerto de escucha del servido" << endl;
+    cin >> port;
 
     bool temp = false;
-    //server = new httpServer(8080, path, ip, user, pass);
-    server = new httpServer(port);
+    server = new httpServer(8080, path, ip, user, pass);
+    //server = new httpServer(port);
     signal(SIGINT, sigClose);
 
     if(server->isConectedToDataBase())
