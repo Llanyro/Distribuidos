@@ -1,6 +1,5 @@
 #include "httpserver.h"
 #include "tools.h"
-#include <cstdio>
 #include "utils.h"
 #include <cstring>
 #include <mysql/mysql.h>
@@ -143,7 +142,6 @@ void httpServer::sendFile(int newsock_fd, char* file)
 {
     std::string mimetype = getmimeType(file);
     std::string filepath = this->files_path + std::string(file);
-    std::cout << filepath << std::endl;
     char* fileContent = nullptr;
     unsigned long int filelen = 0ull;
     char* httpHeader = nullptr;
@@ -157,7 +155,7 @@ int httpServer::getHTTPParameter(std::vector<std::vector<std::string*>*> *lines,
 {
     for(unsigned long int i=0;i<lines->size();i++)
     {
-        std::vector<std::string*> *v=(*lines)[i];
+        std::vector<std::string*>* v = (*lines)[i];
 
         if(((*v)[0])->compare(parameter) == 0)
             return atoi((*v)[1]->c_str());
