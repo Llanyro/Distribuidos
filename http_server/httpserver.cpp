@@ -1,20 +1,23 @@
 #include "httpserver.h"
+#include "tools.h"
 #include <cstdio>
 #include "utils.h"
-#include <iostream>
 #include <cstring>
 #include <mysql/mysql.h>
 
-bool httpServer::getServer() const
+bool httpServer::isConectedToDataBase() const
 {
     return (this->serverPointer != nullptr);
 }
-httpServer::httpServer(unsigned short port)
+httpServer::httpServer(unsigned short port) : httpServer(port, "/home/lubuntu/share/http_server", "localhost", "usuario", "Password1")
 {
-    this->serverPointer = nullptr;
-    //this->serverPointer = mysql_init(0);
-    //this->serverPointer = mysql_real_connect(this->serverPointer, "54.86.107.6", "root", "Passsword1", "mysql", 3306, nullptr, 0);
-    //this->serverPointer = mysql_real_connect(this->serverPointer, "localhost", "root", "Passsword1", "mysql", 3306, nullptr, 0);
+
+}
+httpServer::httpServer(unsigned short port, std::string path, std::string ipDB, std::string user, std::string pass)
+{
+    this->files_path = path + "/html_dir";
+    this->serverPointer = mysql_init(nullptr);
+    mysql_real_connect(this->serverPointer, &ipDB[0], &user[0], &pass[0], "amazon_base", 3306, nullptr, 0);
 
     sock_fd = socket(AF_INET, SOCK_STREAM, 0);
      if (sock_fd < 0)
@@ -34,8 +37,6 @@ httpServer::httpServer(unsigned short port)
     if (bind(sock_fd,(struct sockaddr *) &serv_addr,
           sizeof(serv_addr)) < 0)
           printf("ERROR on binding");
-
-
     listen(sock_fd,5);
 
     buildMimetypeTable();
@@ -47,22 +48,13 @@ std::string httpServer::getmimeType(char* file)
     std::string result="application/octet-stream";
 
     if(strfile[strfile.length()-4]=='.')
-    {
         ext=std::string(&strfile[strfile.length()-3]);
-    }
-    else
-        if(strfile[strfile.length()-5]=='.')
-        {
-            ext=std::string(&strfile[strfile.length()-4]);
-        }
-
+    else if(strfile[strfile.length()-5]=='.')
+        ext=std::string(&strfile[strfile.length()-4]);
 
     std::map<std::string,std::string>::iterator mimetype= this->mimeTypes.find(ext);
     if(mimetype!=mimeTypes.end())
-    {
         result= mimetype->second;
-    }
-
     return result;
 }
 void httpServer::buildMimetypeTable()
@@ -151,10 +143,12 @@ void httpServer::sendFile(int newsock_fd, char* file)
 {
     std::string mimetype = getmimeType(file);
     std::string filepath = this->files_path + std::string(file);
+    //std::cout << filepath << std::endl;
     char* fileContent = nullptr;
     unsigned long int filelen = 0ull;
     char* httpHeader = nullptr;
     unsigned long int headerLen;
+
     readFile(&filepath[0], &fileContent, &filelen);
     createHeader(&httpHeader, &headerLen, "200 OK", &(mimetype[0]), filelen);
     sendContent(newsock_fd, httpHeader, headerLen, fileContent, filelen);
@@ -165,10 +159,8 @@ int httpServer::getHTTPParameter(std::vector<std::vector<std::string*>*> *lines,
     {
         std::vector<std::string*> *v=(*lines)[i];
 
-        if(((*v)[0])->compare(parameter)==0)
-        {
+        if(((*v)[0])->compare(parameter) == 0)
             return atoi((*v)[1]->c_str());
-        }
     }
     return 0;
 }
@@ -176,16 +168,14 @@ void httpServer::resolveRequests(int newsock_fd)
 {
     std::vector<std::vector<std::string*>*> lines;
     readLines(newsock_fd,&lines);
-    printLines(&lines);
-    std::cout<<"\n";
-    std::vector<std::string*> *v=(lines)[0];
-    httpRequest_t req=getRequestType(v);
+    std::vector<std::string*>* v = (lines)[0];
+    httpRequest_t req = getRequestType(v);
     switch(req)
         {
              case httpRequest_t::GET:
                 {
-                    std::string *s2=(*v)[1];
-                    if(s2->compare("/")==0)
+                    std::string* s2 = (*v)[1];
+                    if(s2->compare("/") == 0)
                         sendFile(newsock_fd,"/index.html");
                     else
                         sendFile(newsock_fd,&((*s2)[0]));
@@ -202,9 +192,6 @@ void httpServer::resolveRequests(int newsock_fd)
                     {
                         char* user= getFromPost(postLine,"uname");
                         char* pass= getFromPost(postLine,"psw");
-
-                        std::cout<<"user: "<<user<<"\n";
-                        std::cout<<"pass: "<<user<<"\n";
 
                         if(validatePassword(user,pass))
                             sendFile(newsock_fd,"/services.html");
@@ -224,16 +211,31 @@ void httpServer::resolveRequests(int newsock_fd)
     #endif
     deleteLines(&lines);
 }
-bool httpServer::validatePassword(char* username, char* password)
+bool httpServer::validatePassword(std::string username, std::string password)
 {
-    //size_t sizeUName = strlen(username);
-    //size_t sizeUPass = strlen(password);
     bool temp = false;
-    if(httpServer::getServer() || true)
+    if(httpServer::isConectedToDataBase())
     {
-        if(strcmp(username, "user")== 0)
-            if(strcmp(password, "pass")== 0)
-                temp = true;
+        Tools tool;
+
+        std::string hash = tool.generarHash(password);
+        std::string command = "select * from usuarios where user='" + username + "' and password='" + hash + "';";
+
+        int qstate = mysql_query(this->serverPointer, &command[0]);
+        std::cout << qstate << std::endl;
+        if(qstate == 0)
+        {
+            MYSQL_ROW row;
+            MYSQL_RES* res = nullptr;
+
+            res = mysql_store_result(this->serverPointer);
+            if(res != nullptr)
+            {
+                row = mysql_fetch_row(res);
+                if(row != nullptr)
+                    temp = true;
+            }
+        }
     }
     return temp;
 }

@@ -56,7 +56,7 @@ private:
 
 public:
 
-    bool getServer() const;
+    bool isConectedToDataBase() const;
 
     //
     //Tipos de "Request" soportados por el protocolo HTTP
@@ -82,6 +82,7 @@ public:
      * @param port Puerto en el que esperará conexiones
      */
     httpServer(unsigned short port);
+    httpServer(unsigned short port, std::string path, std::string ipDB, std::string user, std::string pass);
     /**
      * @brief waitForConnections Una vez creado el servidor, este método esperará
      * conexiones por parte de clientes web
@@ -158,7 +159,6 @@ public:
      * @param password Contraseña
      * @return
      */
-    bool validatePassword(char* username,char* password);
-
+    bool validatePassword(std::string username, std::string password);
 };
 #endif // HTTPSERVER_H

@@ -167,9 +167,7 @@ std::vector<std::string*>* strCat(std::string* str,char sep)
             }
         }
 		else
-        {
             strres->append(1,c);
-        }
         count++;
     }
     result->push_back(strres);
