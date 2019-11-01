@@ -18,7 +18,7 @@ int main()
 {
     string path, ip, user, pass;
     unsigned short port = 8080;
-    cout << "Introduce la carpeta del servidor https(Vacio para que sea por default): " << endl;
+    cout << "Introduce la carpeta del servidor https(Ej: /home/ubuntu/http_server): " << endl;
     cin >> path;
     cout << "Introduce la ip del servidor db" << endl;
     cin >> ip;
