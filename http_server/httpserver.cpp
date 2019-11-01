@@ -184,7 +184,6 @@ void httpServer::resolveRequests(int newsock_fd)
                     std::vector<std::string*> postLine;
                     int length=getHTTPParameter(&lines,"Content-Length:");
                     readPostLine(newsock_fd,&postLine,length);
-
                     std::string *s2=(*v)[1];
                     if(s2->compare("/login.php") == 0)
                     {
@@ -193,12 +192,16 @@ void httpServer::resolveRequests(int newsock_fd)
 
                         if(validatePassword(user,pass))
                             sendFile(newsock_fd,"/services.html");
+                        else
+                            sendFile(newsock_fd,"/error.html");
 
                         delete[] user;
                         delete[] pass;
                     }
                     if(s2->compare("/services.php") == 0)
                         sendFile(newsock_fd,"/services.html");
+                    if(s2->compare("/error.php") == 0)
+                        sendFile(newsock_fd,"/index.html");
                }
                break;
         }

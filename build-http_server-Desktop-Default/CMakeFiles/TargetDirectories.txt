@@ -1,3 +1,0 @@
-/home/lubuntu/share/build-http_server-Desktop-Default/CMakeFiles/rebuild_cache.dir
-/home/lubuntu/share/build-http_server-Desktop-Default/CMakeFiles/http_server.dir
-/home/lubuntu/share/build-http_server-Desktop-Default/CMakeFiles/edit_cache.dir

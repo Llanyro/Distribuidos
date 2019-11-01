@@ -1,1 +1,0 @@
-/usr/bin/g++  -g   CMakeFiles/http_server.dir/main.cpp.o CMakeFiles/http_server.dir/httpserver.cpp.o CMakeFiles/http_server.dir/utils.cpp.o CMakeFiles/http_server.dir/tools.cpp.o  -o http_server -lmysqlcppconn -lmysqlclient -lpthread -lz -lm -lrt -latomic -ldl 
