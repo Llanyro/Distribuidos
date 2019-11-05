@@ -63,13 +63,13 @@ public:
     //
     //Sólo se han implementado "GET" y "POST"
 
-    typedef enum class httpRequest_t
+    typedef enum httpRequest_t
     {
         GET,
         HEAD,
         POST,
         PUT,
-        DELETE,
+        DELETE_2,
         CONNECT,
         OPTIONS,
         TRACE

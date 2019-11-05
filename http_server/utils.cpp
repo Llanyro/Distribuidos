@@ -100,7 +100,7 @@ void printLines(std::vector<std::vector<std::string*>*>* lines)
 
 httpServer::httpRequest_t getRequestType(std::vector<std::string*>* line)
 {
-	httpServer::httpRequest_t req = httpServer::GET;
+	httpServer::httpRequest_t req = httpServer::httpRequest_t::GET;
 	std::string* request = (*line)[0];
 
 	if (!request->compare("GET"))
@@ -121,7 +121,7 @@ httpServer::httpRequest_t getRequestType(std::vector<std::string*>* line)
 	}
 	else if (!request->compare("DELETE"))
 	{
-		req = httpServer::DELETE;
+		req = httpServer::DELETE_2;
 	}
 	else if (!request->compare("CONNECT"))
 	{
