@@ -1,3 +1,3 @@
-C:/Users/Fran-Administrador/Desktop/virtual/http_server/out/build/x64-Debug/CMakeFiles/http_server.dir
-C:/Users/Fran-Administrador/Desktop/virtual/http_server/out/build/x64-Debug/CMakeFiles/edit_cache.dir
-C:/Users/Fran-Administrador/Desktop/virtual/http_server/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Fran-Administrador/source/repos/Distribuidos/http_server/out/build/x64-Debug/CMakeFiles/http_server.dir
+C:/Users/Fran-Administrador/source/repos/Distribuidos/http_server/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Fran-Administrador/source/repos/Distribuidos/http_server/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
